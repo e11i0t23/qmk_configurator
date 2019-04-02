@@ -49,7 +49,17 @@
         @change="infoPreviewChanged"
       />
     </div>
-    <div class="botctrl-1-2">
+    <div v-if="electron" class="botctrl-1-2">
+      <button
+        id="fwFile"
+        @click="flashFirmware"
+        title="Flash Firmware to MCU"
+        v-bind:disabled="disableDownloadBinary"
+      >
+        <font-awesome-icon icon="download" size="lg" fixed-width /> Firmware
+      </button>
+    </div>
+    <div v-else class="botctrl-1-2">
       <button
         id="fwFile"
         @click="downloadFirmware"
@@ -107,7 +117,8 @@ export default {
         isUndefined(this.firmwareBinaryURL) ||
         this.firmwareBinaryURL === ''
       );
-    }
+    },
+    electron: function () { return window.electron; }
   },
   watch: {
     /**
@@ -161,6 +172,9 @@ export default {
         this.$refs.downloadElement.click();
         this.downloadElementEnabled = false;
       });
+    },
+    flashFirmware() {
+
     },
     downloadSource() {
       this.urlEncodedData = first(this.firmwareSourceURL);

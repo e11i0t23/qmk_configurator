@@ -1,12 +1,11 @@
 <template>
   <div id="app" @click="dismiss">
     <div>
-      <!--
-        div id="nav">
-          <router-link to="/">Home</router-link> |
-          <router-link to="/about">About</router-link>
-        </div
-      -->
+      <div v-if="electron" id="nav">
+          <router-link to="/">Configure</router-link> |
+          <router-link to="/flash">Flash</router-link>
+        </div>
+        <div v-else></div>
       <header>
         <h1>
           <a href="/"
@@ -65,7 +64,8 @@ export default {
     ...mapGetters('app', ['showSpinner', 'spinnerMsg', 'message']),
     showInfoBar() {
       return this.message !== '';
-    }
+    },
+    electron: function () { return window.electron; }
   },
   methods: {
     ...mapMutations('app', ['setShowSpinner']),

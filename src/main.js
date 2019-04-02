@@ -48,6 +48,14 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 
+
 new Vue({
   render: h => h(StatusBar)
 }).$mount('#status-app');
+
+// Check to see wether we are running inside electron
+if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+       window.electron = true;
+} else {
+       window.electron = false;
+}
