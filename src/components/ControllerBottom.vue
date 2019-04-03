@@ -56,7 +56,7 @@
         title="Flash Firmware to MCU"
         v-bind:disabled="disableDownloadBinary"
       >
-        <font-awesome-icon icon="download" size="lg" fixed-width /> Firmware
+        <font-awesome-icon icon="download" size="lg" fixed-width /> Flash
       </button>
     </div>
     <div v-else class="botctrl-1-2">
@@ -174,7 +174,10 @@ export default {
       });
     },
     flashFirmware() {
-
+      this.urlEncodedData = first(this.firmwareSourceURL);
+      this.keyboardName = this.$store.getters['app/keyboard'];
+      this.filename = this.$store.getters['app/firmwareFile'];
+      window.Bridge.flashURL(this.urlEncodedData, this.keyboardName, this.filename);
     },
     downloadSource() {
       this.urlEncodedData = first(this.firmwareSourceURL);

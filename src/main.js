@@ -7,10 +7,20 @@ import Veil from '@/components/Veil';
 import vSelect from 'vue-select';
 import ga from './ga';
 
+const electron = require('./electron')
+
 ga.init();
 
 Vue.component('Veil', Veil);
 Vue.component('v-select', vSelect);
+
+// Check to see wether we are running inside electron
+if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+       window.electron = true;
+       window.Bridge.statusAppend = (txt) => electron.statusAppend(txt);
+} else {
+       window.electron = false;
+}
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -52,10 +62,3 @@ new Vue({
 new Vue({
   render: h => h(StatusBar)
 }).$mount('#status-app');
-
-// Check to see wether we are running inside electron
-if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
-       window.electron = true;
-} else {
-       window.electron = false;
-}
