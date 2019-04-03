@@ -60,6 +60,7 @@ const getters = {
   enableDownloads: state => state.enableDownloads,
   firmwareBinaryURL: state => state.firmwareBinaryURL,
   firmwareSourceURL: state => state.firmwareSourceURL,
+  firmwareFile: state => state.firmwareFile,
   keymapSourceURL: state => state.keymapSourceURL
 };
 
