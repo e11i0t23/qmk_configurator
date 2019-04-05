@@ -6,6 +6,7 @@ import StatusBar from '@/components/StatusBar';
 import Veil from '@/components/Veil';
 import vSelect from 'vue-select';
 import ga from './ga';
+require('setimmediate');
 
 const electron = require('./electron')
 
@@ -16,10 +17,10 @@ Vue.component('v-select', vSelect);
 
 // Check to see wether we are running inside electron
 if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
-       window.electron = true;
-       window.Bridge.statusAppend = (txt) => electron.statusAppend(txt);
+  window.electron = true;
+  window.Bridge.statusAppend = (txt) => electron.statusAppend(txt);
 } else {
-       window.electron = false;
+  window.electron = false;
 }
 
 import { library } from '@fortawesome/fontawesome-svg-core';
