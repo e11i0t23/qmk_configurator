@@ -3,15 +3,11 @@ import VueAnalytics from 'vue-analytics';
 import config from './ga-development';
 
 export default {
-  init() {
+  init(router) {
     Vue.use(VueAnalytics, {
       id: config.id,
-      autoTracking: {
-        screenview: true
-      },
-      debug: {
-        sendHitTask: process.env.NODE_ENV === 'production'
-      }
+      disabled: true,
+      router
     });
   }
 };

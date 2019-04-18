@@ -24,12 +24,14 @@ const state = {
   keypressListener: undefined,
   showSpinner: false,
   spinnerMsg: '',
-  message: ''
+  message: '',
+  settingsPanelVisible: false
 };
 
 const steno_keyboards = ['gergo', 'georgi'];
 
 const getters = {
+  settingsPanelVisible: state => state.settingsPanelVisible,
   message: state => state.message,
   showSpinner: state => state.showSpinner,
   spinnerMsg: state => state.spinnerMsg,
@@ -253,6 +255,12 @@ const mutations = {
   },
   setMessage(state, msg) {
     state.message = msg;
+  },
+  setSettingsPanel(state, next) {
+    state.settingsPanelVisible = next;
+  },
+  toggleSettingsPanel(state) {
+    state.settingsPanelVisible = !state.settingsPanelVisible;
   }
 };
 
