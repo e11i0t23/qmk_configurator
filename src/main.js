@@ -6,6 +6,7 @@ import StatusBar from '@/components/StatusBar';
 import Veil from '@/components/Veil';
 import vSelect from 'vue-select';
 import ga from './ga';
+import 'setimmediate'
 
 const electron = require('./electron')
 

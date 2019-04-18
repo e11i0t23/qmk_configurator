@@ -174,10 +174,9 @@ export default {
       });
     },
     flashFirmware() {
-      this.urlEncodedData = first(this.firmwareSourceURL);
+      this.urlEncodedData = first(this.firmwareBinaryURL);
       this.keyboardName = this.$store.getters['app/keyboard'];
-      this.filename = this.$store.getters['app/firmwareFile'];
-      window.Bridge.flashURL(this.urlEncodedData, this.keyboardName, this.filename);
+      window.Bridge.flashURL(this.urlEncodedData, this.keyboardName, "WIP");
     },
     downloadSource() {
       this.urlEncodedData = first(this.firmwareSourceURL);
