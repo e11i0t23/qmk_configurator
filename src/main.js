@@ -10,11 +10,6 @@ import 'setimmediate';
 
 const electron = require('./electron');
 
-ga.init();
-
-Vue.component('Veil', Veil);
-Vue.component('v-select', vSelect);
-
 // Check to see wether we are running inside electron
 if (
   typeof navigator === 'object' &&
@@ -47,7 +42,6 @@ import {
   faLinux
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import ga from './ga';
 
 Vue.component('Veil', Veil);
 Vue.component('v-select', vSelect);
