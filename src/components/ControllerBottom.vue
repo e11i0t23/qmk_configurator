@@ -8,7 +8,7 @@
         @click="downloadKeymap"
         v-bind:disabled="disableDownloadKeymap"
       >
-        <font-awesome-icon icon="download" size="lg" fixed-width /> Keymap Only
+        <font-awesome-icon icon="download" size="lg" fixed-width/>Keymap Only
       </button>
       <button
         class="fixed-size"
@@ -17,22 +17,14 @@
         title="Download QMK Firmware code"
         v-bind:disabled="disableDownloadSource"
       >
-        <font-awesome-icon icon="download" size="lg" fixed-width /> Full Source
+        <font-awesome-icon icon="download" size="lg" fixed-width/>Full Source
       </button>
-      <button
-        id="export"
-        @click="exportJSON"
-        title="Export QMK Keymap JSON file"
-      >
-        <font-awesome-icon icon="download" size="lg" fixed-width />
+      <button id="export" @click="exportJSON" title="Export QMK Keymap JSON file">
+        <font-awesome-icon icon="download" size="lg" fixed-width/>
       </button>
       <span class="label-button">Keymap.JSON</span>
-      <button
-        id="import"
-        title="Import QMK Keymap JSON file"
-        @click="importKeymap"
-      >
-        <font-awesome-icon icon="upload" size="lg" fixed-width />
+      <button id="import" title="Import QMK Keymap JSON file" @click="importKeymap">
+        <font-awesome-icon icon="upload" size="lg" fixed-width/>
       </button>
       <input
         id="fileImport"
@@ -40,14 +32,14 @@
         ref="fileImportElement"
         accept="application/json"
         @change="fileImportChanged"
-      />
+      >
       <input
         id="infoPreview"
         type="file"
         accept="application/json"
         ref="infoPreviewElement"
         @change="infoPreviewChanged"
-      />
+      >
     </div>
     <div v-if="electron" class="botctrl-1-2">
       <button
@@ -56,7 +48,7 @@
         title="Flash Firmware to MCU"
         v-bind:disabled="disableDownloadBinary"
       >
-        <font-awesome-icon icon="download" size="lg" fixed-width /> Flash
+        <font-awesome-icon icon="download" size="lg" fixed-width/>Flash
       </button>
     </div>
     <div v-else class="botctrl-1-2">
@@ -66,15 +58,11 @@
         title="Download firmware file for flashing"
         v-bind:disabled="disableDownloadBinary"
       >
-        <font-awesome-icon icon="download" size="lg" fixed-width /> Firmware
+        <font-awesome-icon icon="download" size="lg" fixed-width/>Firmware
       </button>
     </div>
     <div v-if="downloadElementEnabled">
-      <a
-        ref="downloadElement"
-        v-bind:href="urlEncodedData"
-        v-bind:download="filename"
-      />
+      <a ref="downloadElement" v-bind:href="urlEncodedData" v-bind:download="filename"/>
     </div>
   </div>
 </template>
@@ -118,7 +106,9 @@ export default {
         this.firmwareBinaryURL === ''
       );
     },
-    electron: function () { return window.electron; }
+    electron: function() {
+      return window.electron;
+    }
   },
   watch: {
     /**
@@ -176,7 +166,12 @@ export default {
     flashFirmware() {
       this.urlEncodedData = first(this.firmwareBinaryURL);
       this.keyboardName = this.$store.getters['app/keyboard'];
-      window.Bridge.flashURL(this.urlEncodedData, this.keyboardName, "WIP");
+      this.filename = this.$store.getters['app/firmwareFile'];
+      window.Bridge.flashURL(
+        this.urlEncodedData,
+        this.keyboardName,
+        this.filename
+      );
     },
     downloadSource() {
       this.urlEncodedData = first(this.firmwareSourceURL);
