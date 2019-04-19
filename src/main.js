@@ -7,21 +7,6 @@ import Veil from '@/components/Veil';
 import vSelect from 'vue-select';
 import ga from './ga';
 import 'setimmediate';
-
-const electron = require('./electron');
-
-// Check to see wether we are running inside electron
-if (
-  typeof navigator === 'object' &&
-  typeof navigator.userAgent === 'string' &&
-  navigator.userAgent.indexOf('Electron') >= 0
-) {
-  window.electron = true;
-  window.Bridge.statusAppend = txt => electron.statusAppend(txt);
-} else {
-  window.electron = false;
-}
-
 import VueSlideoutPanel from 'vue2-slideout-panel';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -42,6 +27,22 @@ import {
   faLinux
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+import { statusAppend } from './electron';
+
+// Electron specific Code
+if (
+  typeof navigator === 'object' &&
+  typeof navigator.userAgent === 'string' &&
+  navigator.userAgent.indexOf('Electron') >= 0
+) {
+  window.electron = true; //We set a global value to be used later
+  //We use the Bridge as a way to share functions between electron and vue
+  window.Bridge.statusAppend = txt => statusAppend(txt);
+} else {
+  window.electron = false;
+}
+// End of electon specific code
 
 Vue.component('Veil', Veil);
 Vue.component('v-select', vSelect);
