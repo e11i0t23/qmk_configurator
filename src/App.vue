@@ -1,28 +1,30 @@
 <template>
   <div id="app" @click="dismiss">
     <div>
-      <div v-if="electron" id="nav">
-          <router-link to="/">Configure</router-link> |
-          <router-link to="/flash">Flash</router-link>
-        </div>
-        <div v-else></div>
       <header>
         <h1>
-          <a href="/"
-            ><img
+          <a href="/">
+            <img
               src="./../assets/qmk_icon_512.png"
               alt="QMK Logo"
               width="48"
               style="vertical-align: middle"
-            />QMK Configurator</a
-          >
+            >QMK Configurator
+          </a>
         </h1>
         <p class="random-potato">{{ potatoFact }}</p>
       </header>
-      <router-view />
-      <spinner :isVisible="showSpinner" :status="spinnerMsg" />
-      <InfoBar :msg="message" />
+      <router-view/>
+      <spinner :isVisible="showSpinner" :status="spinnerMsg"/>
+      <InfoBar :msg="message"/>
+      <div class="openSettings">
+        <button @click="showSettings">
+          <font-awesome-icon icon="chevron-left" size="lg"/>
+          <font-awesome-icon icon="cog" size="lg"/>
+        </button>
+      </div>
     </div>
+    <slideout-panel></slideout-panel>
     <footer>
       <p>
         This project is maintained by QMK collaborators and contributors like
@@ -37,7 +39,9 @@ import InfoBar from '@/components/InfoBar';
 import potatoFacts from '@/potato-facts';
 import random from 'lodash/random';
 import Spinner from '@/components/spinner';
+import SettingsPanel from '@/components/SettingsPanel';
 import { mapGetters, mapMutations } from 'vuex';
+import isFunction from 'lodash/isFunction';
 export default {
   name: 'app',
   components: {
@@ -48,7 +52,8 @@ export default {
     return {
       potatoFact: 'QMK for potatoes',
       interval: 120000,
-      msg: 'hello'
+      destroyWatcher: undefined,
+      panel: undefined
     };
   },
   mounted() {
@@ -56,24 +61,53 @@ export default {
     this.interval = setInterval(() => {
       this.randomPotatoFact();
     }, this.interval);
+    this.destroyWatcher = this.$store.watch(
+      (state, getters) => getters['app/settingsPanelVisible'],
+      this.toggleSettingsPanel
+    );
   },
   beforeDestroy() {
     clearInterval(this.interval);
+    if (isFunction(this.destroyWatcher)) {
+      this.destroyWatcher();
+    }
   },
   computed: {
     ...mapGetters('app', ['showSpinner', 'spinnerMsg', 'message']),
     showInfoBar() {
       return this.message !== '';
     },
-    electron: function () { return window.electron; }
+    electron: function() {
+      return window.electron;
+    }
   },
   methods: {
-    ...mapMutations('app', ['setShowSpinner']),
+    ...mapMutations('app', ['setShowSpinner', 'setSettingsPanel']),
     randomPotatoFact() {
       this.potatoFact = potatoFacts[random(0, potatoFacts.length - 1)];
     },
     dismiss() {
       this.setShowSpinner(false);
+    },
+    toggleSettingsPanel(visible) {
+      if (visible) {
+        this.panel = this.$showPanel({
+          component: SettingsPanel,
+          openOn: 'right',
+          props: {},
+          width: '300px'
+        });
+        this.panel.promise.then(() => {
+          // user clicked on veil
+          this.setSettingsPanel(false);
+        });
+      } else {
+        this.panel.hide();
+        this.panel = undefined;
+      }
+    },
+    showSettings() {
+      this.setSettingsPanel(true);
     }
   }
 };
@@ -83,20 +117,17 @@ export default {
   display: grid;
   grid-template: 1fr / minmax(1000px, 1300px);
   justify-content: center;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.openSettings {
+  position: fixed;
+  right: 0;
+  top: 50%;
+}
+div.openSettings > button {
+  cursor: pointer;
 }
 </style>
